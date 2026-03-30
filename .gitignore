@@ -36,6 +36,7 @@ build/
 *.log
 *.pid
 docker-compose.override.yml
+.env
 
 ### Application specific ###
 application-local.yml
@@ -45,3 +46,11 @@ application-dev.yml
 ### Database ###
 *.db
 *.sqlite
+
+# Build
+*.jar
+*.war
+*.nar
+*.ear
+*.tar.gz
+*.rar

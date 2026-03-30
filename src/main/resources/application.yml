@@ -3,10 +3,16 @@ spring:
     name: wallet-service
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/walletdb
-    username: wallet_user
-    password: wallet_pass
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/walletdb}
+    username: ${SPRING_DATASOURCE_USERNAME:wallet_user}
+    password: ${SPRING_DATASOURCE_PASSWORD:wallet_pass}
     driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: ${SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE:20}
+      minimum-idle: ${SPRING_DATASOURCE_HIKARI_MINIMUM_IDLE:5}
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
 
   jpa:
     hibernate:
@@ -15,7 +21,11 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
-    show-sql: false
+        jdbc:
+          batch_size: 20
+        order_inserts: true
+        order_updates: true
+    show-sql: ${SPRING_JPA_SHOW_SQL:false}
 
   liquibase:
     change-log: classpath:/db/changelog/db.changelog-master.yaml
@@ -27,11 +37,17 @@ spring:
       mode: never
 
 server:
-  port: 8080
+  port: ${SERVER_PORT:8080}
+  tomcat:
+    threads:
+      max: 200
+      min-spare: 10
+    accept-count: 100
+    max-connections: 10000
 
 logging:
   level:
-    com.kranker.walletservice: DEBUG
+    com.kranker.walletservice: ${LOGGING_LEVEL_COM_KRANKER_WALLETSERVICE:DEBUG}
     org.springframework.web: INFO
     org.hibernate: WARN
     liquibase: INFO
