@@ -3,6 +3,7 @@ package com.kranker.walletservice.exception;
 import com.kranker.walletservice.dto.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -45,7 +46,7 @@ public class GlobalExceptionHandler {
         .orElse("Validation error");
 
     ErrorResponse error = ErrorResponse.builder()
-        .status(ErrorCode.INVALID_AMOUNT.getHttpStatus().value())
+        .status(HttpStatus.BAD_REQUEST.value())
         .message(errorMessage)
         .path(request.getRequestURI())
         .timestamp(LocalDateTime.now())
@@ -61,7 +62,7 @@ public class GlobalExceptionHandler {
     log.warn("Invalid JSON: {}", ex.getMessage());
 
     ErrorResponse error = ErrorResponse.builder()
-        .status(ErrorCode.INVALID_OPERATION_TYPE.getHttpStatus().value())
+        .status(HttpStatus.BAD_REQUEST.value())
         .message("Invalid JSON format")
         .path(request.getRequestURI())
         .timestamp(LocalDateTime.now())
